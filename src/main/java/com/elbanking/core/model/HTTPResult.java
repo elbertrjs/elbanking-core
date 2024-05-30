@@ -1,4 +1,4 @@
-package com.elbanking.model;
+package com.elbanking.core.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

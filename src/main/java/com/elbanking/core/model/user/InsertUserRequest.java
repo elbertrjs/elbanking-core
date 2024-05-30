@@ -1,4 +1,4 @@
-package com.elbanking.model.user;
+package com.elbanking.core.model.user;
 
 public class InsertUserRequest {
 
