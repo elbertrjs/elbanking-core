@@ -1,6 +1,7 @@
 package com.elbanking.core.mapper.user;
 
 import com.elbanking.core.model.user.RegisterUserRequest;
+import com.elbanking.core.model.user.RegisterUserResult;
 import com.elbanking.core.model.user.SignUpRequestForm;
 import com.elbanking.core.model.user.UserDAO;
 import com.elbanking.core.model.user.UserDO;
@@ -13,4 +14,8 @@ public interface UserMapper {
     UserDO convertToUserDO(UserDAO userDAO);
 
     UserDAO convertToUserDAO(UserDO userDo);
+
+    UserDAO convertToUserDAO(RegisterUserRequest registerUserRequest);
+
+    RegisterUserResult convertToUserRegisterResult(UserDAO userDAO);
 }
