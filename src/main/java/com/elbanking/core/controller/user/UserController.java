@@ -28,6 +28,6 @@ public class UserController {
         return
             ResponseEntity
                 .status(HttpStatus.OK)
-                .body("Success");
+                .body(registerUserResult);
     }
 }
