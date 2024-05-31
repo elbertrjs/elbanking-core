@@ -1,4 +1,4 @@
-package com.elbanking.core.manager;
+package com.elbanking.core.manager.user;
 
 import com.elbanking.core.model.user.RegisterUserRequest;
 import com.elbanking.core.model.user.RegisterUserResult;

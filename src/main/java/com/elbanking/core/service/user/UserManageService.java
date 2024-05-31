@@ -1,4 +1,4 @@
-package com.elbanking.core.service;
+package com.elbanking.core.service.user;
 
 import com.elbanking.core.model.user.UserDAO;
 

@@ -1,7 +1,7 @@
-package com.elbanking.core.controller;
+package com.elbanking.core.controller.user;
 
-import com.elbanking.core.manager.UserManager;
-import com.elbanking.core.mapper.UserMapper;
+import com.elbanking.core.manager.user.UserManager;
+import com.elbanking.core.mapper.user.UserMapper;
 import com.elbanking.core.model.user.RegisterUserRequest;
 import com.elbanking.core.model.user.RegisterUserResult;
 import com.elbanking.core.model.user.SignUpRequestForm;

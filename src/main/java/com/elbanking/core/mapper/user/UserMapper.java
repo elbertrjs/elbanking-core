@@ -1,4 +1,4 @@
-package com.elbanking.core.mapper;
+package com.elbanking.core.mapper.user;
 
 import com.elbanking.core.model.user.RegisterUserRequest;
 import com.elbanking.core.model.user.SignUpRequestForm;
