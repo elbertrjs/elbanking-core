@@ -5,7 +5,9 @@ import com.elbanking.core.model.user.UserDAO;
 import com.elbanking.core.model.user.UserDO;
 import com.elbanking.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserManageServiceImpl implements UserManageService{
 
     @Autowired
