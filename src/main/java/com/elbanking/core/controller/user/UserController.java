@@ -18,7 +18,8 @@ public class UserController {
     @Autowired
     private UserManager userManager;
 
-    @Autowired UserMapper userMapper;
+    @Autowired
+    private UserMapper userMapper;
     @PostMapping("/users")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequestForm signUpRequestForm){
 
