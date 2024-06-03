@@ -1,4 +1,4 @@
-package com.elbanking.core;
+package com.elbanking.core.application;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
