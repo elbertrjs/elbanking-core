@@ -33,7 +33,7 @@ public class UserController {
         SignUpResult signUpResult = SignUpResult.builder()
                 .status(HttpStatus.OK.value())
                 .message("Success")
-                .data(registerUserResult)
+                .data(registerUserResult.getData())
                 .build();
 
         return signUpResult;
