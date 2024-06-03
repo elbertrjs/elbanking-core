@@ -4,9 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.javamoney.moneta.Money;
 
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
 import java.util.Date;
 
 @Data
@@ -15,9 +14,8 @@ import java.util.Date;
 @Builder
 public class AccountDAO {
     private String id;
-    private String user_id;
-    private CurrencyUnit balance_unit;
-    private MonetaryAmount balance_value;
-    private Date gmt_create;
-    private Date gmt_modified;
+    private String userId;
+    private Money balance;
+    private Date gmtCreate;
+    private Date gmtModified;
 }
