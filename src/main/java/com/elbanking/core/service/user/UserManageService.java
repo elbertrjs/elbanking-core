@@ -4,4 +4,6 @@ import com.elbanking.core.model.user.UserDAO;
 
 public interface UserManageService {
     public UserDAO insertUser(UserDAO userDAO);
+
+    public UserDAO queryUser(String email);
 }

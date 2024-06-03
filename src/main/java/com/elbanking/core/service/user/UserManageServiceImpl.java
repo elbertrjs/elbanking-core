@@ -21,4 +21,11 @@ public class UserManageServiceImpl implements UserManageService{
         UserDO createdUserDO = (UserDO) userRepository.save(userDO);
         return userMapper.convertToUserDAO(createdUserDO);
     }
+
+    @Override
+    public UserDAO queryUser(String email) {
+        UserDO userDO = userRepository.findByEmail(email);
+        UserDAO userDAO = userMapper.convertToUserDAO(userDO);
+        return userDAO;
+    }
 }

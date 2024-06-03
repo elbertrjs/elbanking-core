@@ -38,7 +38,16 @@ public class UserManagerImpl implements UserManager{
                     .build();
         }
 
+        UserDAO existingUser = userManageService.queryUser(registerUserRequest.getEmail());
 
+        try{
+            Assert.isNull(existingUser, StatusCodeEnum.INVALID_EMAIL_FORMAT.getMessage());
+        }catch(IllegalArgumentException e){
+            return RegisterUserResult
+                    .builder()
+                    .statusCode(StatusCodeEnum.USER_EXISTS)
+                    .build();
+        }
         UserDAO userToRegister = UserDAO.builder()
                 .email(registerUserRequest.getEmail())
                 .password(passwordEncoder.encode(registerUserRequest.getPassword()))
