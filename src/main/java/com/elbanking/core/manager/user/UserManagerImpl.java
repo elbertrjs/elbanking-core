@@ -9,6 +9,7 @@ import com.elbanking.core.model.user.UserDAO;
 import com.elbanking.core.service.user.UserManageService;
 import com.elbanking.core.util.EmailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -19,6 +20,9 @@ public class UserManagerImpl implements UserManager{
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public RegisterUserResult registerUser(RegisterUserRequest registerUserRequest) {
@@ -35,7 +39,10 @@ public class UserManagerImpl implements UserManager{
         }
 
 
-        UserDAO userToRegister = userMapper.convertToUserDAO(registerUserRequest);
+        UserDAO userToRegister = UserDAO.builder()
+                .email(registerUserRequest.getEmail())
+                .password(passwordEncoder.encode(registerUserRequest.getPassword()))
+                .build();
 
         UserDAO createdUser = userManageService.insertUser(userToRegister);
 

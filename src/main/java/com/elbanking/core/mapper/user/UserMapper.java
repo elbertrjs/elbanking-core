@@ -16,7 +16,5 @@ public interface UserMapper {
 
     UserDAO convertToUserDAO(UserDO userDo);
 
-    UserDAO convertToUserDAO(RegisterUserRequest registerUserRequest);
-
     RegisterUserView convertToRegisterUserView(UserDAO userDAO);
 }
