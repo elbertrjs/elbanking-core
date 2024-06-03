@@ -26,7 +26,7 @@ public class AccountDO {
     private String id;
     private String user_id;
     private String balance_unit;
-    private String balance_value;
+    private Long balance_value;
     private Date gmt_create;
     private Date gmt_modified;
 }
