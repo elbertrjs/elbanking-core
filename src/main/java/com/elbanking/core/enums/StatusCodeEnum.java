@@ -1,13 +1,15 @@
 package com.elbanking.core.enums;
 
+import com.elbanking.core.model.HTTPResult;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public enum StatusCodeEnum {
 
-    SUCCESS(200,"00000","Success"),
-    INVALID_EMAIL_FORMAT(400,"00001","Invalid email format"),
-    USER_EXISTS(409,"00002","User already exist");
+    SUCCESS(HttpStatus.OK.value(),"00000","Success"),
+    INVALID_EMAIL_FORMAT(HttpStatus.BAD_REQUEST.value(), "00001","Invalid email format"),
+    USER_EXISTS(HttpStatus.CONFLICT.value(), "00002","User already exist");
 
     private Integer httpStatusCode;
     private String internalStatusCode;
