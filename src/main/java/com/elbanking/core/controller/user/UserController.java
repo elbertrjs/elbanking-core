@@ -31,8 +31,8 @@ public class UserController {
 
 
         SignUpResult signUpResult = SignUpResult.builder()
-                .status(HttpStatus.OK.value())
-                .message("Success")
+                .status(registerUserResult.getStatusCode().getHttpStatusCode())
+                .message(registerUserResult.getStatusCode().getMessage())
                 .data(registerUserResult.getData())
                 .build();
 
