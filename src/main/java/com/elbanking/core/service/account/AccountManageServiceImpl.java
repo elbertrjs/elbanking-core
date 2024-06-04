@@ -7,6 +7,8 @@ import com.elbanking.core.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class AccountManageServiceImpl implements AccountManageService {
     @Autowired
@@ -17,9 +19,12 @@ public class AccountManageServiceImpl implements AccountManageService {
 
     @Override
     public AccountDAO insertAccount(AccountDAO accountDAO) {
-        AccountDO userDO = accountMapper.convertToAccountDO(accountDAO);
-        AccountDO accountDO = accountRepository.save(userDO);
-        return accountMapper.convertToAccountDAO(accountDO);
+        accountDAO.setGmtCreate(new Date());
+        accountDAO.setGmtModified(new Date());
+
+        AccountDO accountDO = accountMapper.convertToAccountDO(accountDAO);
+        AccountDO createdAccountDO = accountRepository.save(accountDO);
+        return accountMapper.convertToAccountDAO(createdAccountDO);
     }
 
     @Override
