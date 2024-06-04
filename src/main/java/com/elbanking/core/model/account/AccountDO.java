@@ -1,5 +1,6 @@
 package com.elbanking.core.model.account;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -23,10 +25,15 @@ import java.util.Date;
 public class AccountDO {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private String id;
-    private String user_id;
-    private String balance_currency;
-    private Long balance_value;
-    private Date gmt_create;
-    private Date gmt_modified;
+    private UUID id;
+    @Column(name = "user_id")
+    private UUID userId;
+    @Column(name = "balance_value")
+    private Long balanceValue;
+    @Column(name = "balance_currency")
+    private String balanceCurrency;
+    @Column(name = "gmt_create")
+    private Date gmtCreate;
+    @Column(name = "gmt_modified")
+    private Date gmtModified;
 }
