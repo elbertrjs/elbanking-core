@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,4 +15,6 @@ public class UserDAO {
     private String id;
     private String email;
     private String password;
+    private Date gmtCreate;
+    private Date gmtModified;
 }
