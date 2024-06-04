@@ -1,13 +1,14 @@
 package com.elbanking.core.model.user;
 
-import com.elbanking.core.model.BaseManagerResult;
+import com.elbanking.core.model.ResultData;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 @Data
 @AllArgsConstructor
-@SuperBuilder
-public class RegisterUserResult extends BaseManagerResult {
-
+@Builder
+public class RegisterUserResult extends ResultData {
+    private String userId;
 }

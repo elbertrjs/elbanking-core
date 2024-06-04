@@ -1,13 +1,15 @@
 package com.elbanking.core.controller.user;
 
+import com.elbanking.core.enums.CoreException;
+import com.elbanking.core.enums.StatusCodeEnum;
 import com.elbanking.core.manager.user.UserManager;
 import com.elbanking.core.mapper.user.UserMapper;
 import com.elbanking.core.model.HTTPResult;
+import com.elbanking.core.model.ResultData;
 import com.elbanking.core.model.user.RegisterUserRequest;
 import com.elbanking.core.model.user.RegisterUserResult;
-import com.elbanking.core.model.user.SignUpRequestForm;
-import com.elbanking.core.model.user.SignUpResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,19 +24,24 @@ public class UserController {
     private UserMapper userMapper;
 
     @PostMapping("/users")
-    public HTTPResult signUp(@RequestBody SignUpRequestForm signUpRequestForm){
+    public ResponseEntity<HTTPResult> signUp(@RequestBody RegisterUserRequest registerUserRequest){
+        ResultData resultData = null;
+        StatusCodeEnum statusCode;
 
-
-        RegisterUserRequest registerUserRequest = userMapper.convertToRegisterUserRequest(signUpRequestForm);
-        RegisterUserResult registerUserResult = userManager.registerUser(registerUserRequest);
-
-
-        SignUpResult signUpResult = SignUpResult.builder()
-                .status(registerUserResult.getStatusCode().getHttpStatusCode())
-                .message(registerUserResult.getStatusCode().getMessage())
-                .data(registerUserResult.getData())
-                .build();
-
-        return signUpResult;
+        try{
+            RegisterUserResult registerUserResult = userManager.registerUser(registerUserRequest);
+            resultData = registerUserResult;
+            statusCode = StatusCodeEnum.SUCCESS;
+        }catch(CoreException e){
+            statusCode = e.getStatusCode();
+        }
+        HTTPResult httpResult = HTTPResult
+                .builder()
+                .status(statusCode.getHttpStatusCode())
+                .message(statusCode.getMessage())
+                .data(resultData).build();
+        return ResponseEntity
+                .status(statusCode.getHttpStatusCode())
+                .body(httpResult);
     }
 }

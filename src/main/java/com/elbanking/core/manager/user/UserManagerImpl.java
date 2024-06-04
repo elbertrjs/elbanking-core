@@ -1,5 +1,6 @@
 package com.elbanking.core.manager.user;
 
+import com.elbanking.core.enums.CoreException;
 import com.elbanking.core.enums.StatusCodeEnum;
 import com.elbanking.core.mapper.user.UserMapper;
 import com.elbanking.core.model.account.AccountDAO;
@@ -36,26 +37,16 @@ public class UserManagerImpl implements UserManager{
     public RegisterUserResult registerUser(RegisterUserRequest registerUserRequest) {
         boolean isEmailValid = EmailUtil.isEmailValid(registerUserRequest.getEmail());
 
-        try{
-            Assert.isTrue(isEmailValid, StatusCodeEnum.INVALID_EMAIL_FORMAT.getMessage());
-        }catch(IllegalArgumentException e){
-
-            return RegisterUserResult
-                    .builder()
-                    .statusCode(StatusCodeEnum.INVALID_EMAIL_FORMAT)
-                    .build();
+        if(isEmailValid == false){
+            throw new CoreException(StatusCodeEnum.INVALID_EMAIL_FORMAT);
         }
 
         UserDAO existingUser = userService.queryUser(registerUserRequest.getEmail());
 
-        try{
-            Assert.isNull(existingUser, StatusCodeEnum.INVALID_EMAIL_FORMAT.getMessage());
-        }catch(IllegalArgumentException e){
-            return RegisterUserResult
-                    .builder()
-                    .statusCode(StatusCodeEnum.USER_EXISTS)
-                    .build();
+        if(existingUser != null){
+            throw new CoreException(StatusCodeEnum.USER_EXISTS);
         }
+
         UserDAO userToRegister = UserDAO.builder()
                 .email(registerUserRequest.getEmail())
                 .password(passwordEncoder.encode(registerUserRequest.getPassword()))
@@ -73,11 +64,7 @@ public class UserManagerImpl implements UserManager{
 
         accountService.insertAccount(accountDAO);
 
-        RegisterUserView registerUserView = userMapper.convertToRegisterUserView(createdUser);
-
-        return RegisterUserResult.builder()
-                .statusCode(StatusCodeEnum.SUCCESS)
-                .data(registerUserView).build();
+        return userMapper.convertToRegisterUserResult(createdUser);
 
     }
 }

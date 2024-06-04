@@ -1,17 +1,22 @@
 package com.elbanking.core.model;
 
+import com.elbanking.core.enums.StatusCodeEnum;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 import lombok.experimental.SuperBuilder;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
-public abstract class HTTPResult {
-    private Integer status;
-    private String message;
+@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class HTTPResult {
+    private final Integer status;
+    private final String message;
     private ResultData data;
 }
