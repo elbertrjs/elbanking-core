@@ -1,8 +1,6 @@
 package com.elbanking.core.mapper.user;
 
-import com.elbanking.core.model.user.RegisterUserRequest;
 import com.elbanking.core.model.user.RegisterUserResult;
-import com.elbanking.core.model.user.SignUpRequestForm;
 import com.elbanking.core.model.user.UserDAO;
 import com.elbanking.core.model.user.UserDO;
 import org.mapstruct.Mapper;
@@ -10,7 +8,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    RegisterUserRequest convertToRegisterUserRequest(SignUpRequestForm signUpRequestForm);
 
     UserDO convertToUserDO(UserDAO userDAO);
 
