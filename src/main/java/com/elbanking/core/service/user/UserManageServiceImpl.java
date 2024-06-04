@@ -7,6 +7,8 @@ import com.elbanking.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class UserManageServiceImpl implements UserManageService{
 
@@ -17,6 +19,8 @@ public class UserManageServiceImpl implements UserManageService{
     private UserMapper userMapper;
     @Override
     public UserDAO insertUser(UserDAO userDAO) {
+        userDAO.setGmtCreate(new Date());
+        userDAO.setGmtModified(new Date());
         UserDO userDO = userMapper.convertToUserDO(userDAO);
         UserDO createdUserDO = userRepository.save(userDO);
         return userMapper.convertToUserDAO(createdUserDO);
