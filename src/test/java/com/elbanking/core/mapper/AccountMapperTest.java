@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.UUID;
 
 @ExtendWith(SpringExtension.class) // JUnit 5
 @ContextConfiguration(classes = {
@@ -28,8 +29,8 @@ public class AccountMapperTest {
         Money balance = Money.of(new BigDecimal("123.123"),"IDR");
            AccountDAO accountDAO = AccountDAO
                    .builder()
-                   .id("1")
-                   .userId("1")
+                   .id(UUID.randomUUID().toString())
+                   .userId(UUID.randomUUID().toString())
                    .balance(balance)
                    .gmtCreate(new Date())
                    .gmtModified(new Date())
@@ -43,12 +44,12 @@ public class AccountMapperTest {
     public void testConvertToAccountDAO(){
         AccountDO accountDO = AccountDO
                 .builder()
-                .id("1")
-                .user_id("1")
-                .balance_currency("IDR")
-                .balance_value(12312L)
-                .gmt_create(new Date())
-                .gmt_modified(new Date())
+                .id(UUID.randomUUID())
+                .userId(UUID.randomUUID())
+                .balanceCurrency("IDR")
+                .balanceValue(12312L)
+                .gmtCreate(new Date())
+                .gmtModified(new Date())
                 .build();
 
         AccountDAO accountDAO = accountMapper.convertToAccountDAO(accountDO);
