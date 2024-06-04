@@ -38,4 +38,20 @@ public class AccountMapperTest {
             AccountDO accountDO = accountMapper.convertToAccountDO(accountDAO);
             System.out.println(accountDO.toString());
     }
+
+    @Test
+    public void testConvertToAccountDAO(){
+        AccountDO accountDO = AccountDO
+                .builder()
+                .id("1")
+                .user_id("1")
+                .balance_currency("IDR")
+                .balance_value(12312L)
+                .gmt_create(new Date())
+                .gmt_modified(new Date())
+                .build();
+
+        AccountDAO accountDAO = accountMapper.convertToAccountDAO(accountDO);
+        System.out.println(accountDAO.toString());
+    }
 }
