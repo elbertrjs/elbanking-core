@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -28,7 +29,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDAO queryAccount(String id) {
-        return null;
+    public AccountDAO queryAccountById(String id) {
+        Optional<AccountDO> queriedAccountDO = accountRepository.findById(id).stream().findFirst();
+        if(queriedAccountDO.isPresent() == false){
+            return null;
+        }
+        AccountDO accountDO = queriedAccountDO.get();
+        return accountMapper.convertToAccountDAO(accountDO);
     }
 }

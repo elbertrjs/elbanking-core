@@ -5,5 +5,5 @@ import com.elbanking.core.model.account.AccountDAO;
 public interface AccountService {
     public AccountDAO insertAccount(AccountDAO accountDAO);
 
-    public AccountDAO queryAccount(String id);
+    public AccountDAO queryAccountById(String id);
 }
