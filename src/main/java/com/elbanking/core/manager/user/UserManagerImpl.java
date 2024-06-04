@@ -7,8 +7,8 @@ import com.elbanking.core.model.user.RegisterUserRequest;
 import com.elbanking.core.model.user.RegisterUserResult;
 import com.elbanking.core.model.user.RegisterUserView;
 import com.elbanking.core.model.user.UserDAO;
-import com.elbanking.core.service.account.AccountManageService;
-import com.elbanking.core.service.user.UserManageService;
+import com.elbanking.core.service.account.AccountService;
+import com.elbanking.core.service.user.UserService;
 import com.elbanking.core.util.EmailUtil;
 import org.javamoney.moneta.Money;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,10 @@ import java.math.BigDecimal;
 @Service
 public class UserManagerImpl implements UserManager{
     @Autowired
-    private UserManageService userManageService;
+    private UserService userService;
 
     @Autowired
-    private AccountManageService accountManageService;
+    private AccountService accountService;
 
     @Autowired
     private UserMapper userMapper;
@@ -46,7 +46,7 @@ public class UserManagerImpl implements UserManager{
                     .build();
         }
 
-        UserDAO existingUser = userManageService.queryUser(registerUserRequest.getEmail());
+        UserDAO existingUser = userService.queryUser(registerUserRequest.getEmail());
 
         try{
             Assert.isNull(existingUser, StatusCodeEnum.INVALID_EMAIL_FORMAT.getMessage());
@@ -61,7 +61,7 @@ public class UserManagerImpl implements UserManager{
                 .password(passwordEncoder.encode(registerUserRequest.getPassword()))
                 .build();
 
-        UserDAO createdUser = userManageService.insertUser(userToRegister);
+        UserDAO createdUser = userService.insertUser(userToRegister);
 
         Money initialBalance = Money.of(new BigDecimal(500000),"IDR");
 
@@ -71,7 +71,7 @@ public class UserManagerImpl implements UserManager{
                 .balance(initialBalance)
                 .build();
 
-        accountManageService.insertAccount(accountDAO);
+        accountService.insertAccount(accountDAO);
 
         RegisterUserView registerUserView = userMapper.convertToRegisterUserView(createdUser);
 

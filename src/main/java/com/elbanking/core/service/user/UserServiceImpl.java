@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class UserManageServiceImpl implements UserManageService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;

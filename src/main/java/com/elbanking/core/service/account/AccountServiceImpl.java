@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class AccountManageServiceImpl implements AccountManageService {
+public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountMapper accountMapper;
 
