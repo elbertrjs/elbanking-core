@@ -20,9 +20,6 @@ public class UserController {
     @Autowired
     private UserManager userManager;
 
-    @Autowired
-    private UserMapper userMapper;
-
     @PostMapping("/users")
     public ResponseEntity<HTTPResult> signUp(@RequestBody RegisterUserRequest registerUserRequest){
         ResultData resultData = null;
