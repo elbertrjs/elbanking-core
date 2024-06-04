@@ -18,7 +18,7 @@ public class AccountManageServiceImpl implements AccountManageService {
     @Override
     public AccountDAO insertAccount(AccountDAO accountDAO) {
         AccountDO userDO = accountMapper.convertToAccountDO(accountDAO);
-        AccountDO accountDO = (AccountDO) accountRepository.save(userDO);
+        AccountDO accountDO = accountRepository.save(userDO);
         return accountMapper.convertToAccountDAO(accountDO);
     }
 

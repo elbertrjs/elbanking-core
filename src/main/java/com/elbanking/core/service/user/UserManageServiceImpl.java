@@ -18,7 +18,7 @@ public class UserManageServiceImpl implements UserManageService{
     @Override
     public UserDAO insertUser(UserDAO userDAO) {
         UserDO userDO = userMapper.convertToUserDO(userDAO);
-        UserDO createdUserDO = (UserDO) userRepository.save(userDO);
+        UserDO createdUserDO = userRepository.save(userDO);
         return userMapper.convertToUserDAO(createdUserDO);
     }
 
