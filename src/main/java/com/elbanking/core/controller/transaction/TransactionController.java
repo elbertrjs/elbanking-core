@@ -1,15 +1,12 @@
-package com.elbanking.core.controller.TransactionController;
+package com.elbanking.core.controller.transaction;
 
 import com.elbanking.core.enums.CoreException;
 import com.elbanking.core.enums.StatusCodeEnum;
 import com.elbanking.core.manager.transaction.TransactionManager;
-import com.elbanking.core.manager.user.UserManager;
 import com.elbanking.core.model.HTTPResult;
 import com.elbanking.core.model.ResultData;
 import com.elbanking.core.model.transaction.InsertTransactionRequest;
 import com.elbanking.core.model.transaction.InsertTransactionResult;
-import com.elbanking.core.model.user.RegisterUserRequest;
-import com.elbanking.core.model.user.RegisterUserResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
