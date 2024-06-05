@@ -4,11 +4,13 @@ import com.elbanking.core.model.ResultData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
 
 @Data
 @AllArgsConstructor
 @Builder
 public class InsertTransactionResult extends ResultData {
-    private Long remainingBalance;
+    private String transactionId;
+    private Long transactionAmount;
+    private Long remainingAccountBalance;
+    private String currency;
 }

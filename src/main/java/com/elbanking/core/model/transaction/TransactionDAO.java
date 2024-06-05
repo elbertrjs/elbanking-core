@@ -14,8 +14,8 @@ import java.util.Date;
 public class TransactionDAO {
     private String transactionId;
     private String accountId;
-    private Long transaction_value;
-    private String transaction_currency;
+    private Long transactionValue;
+    private String transactionCurrency;
     private String type;
     private String note;
     private Date gmtCreate;
