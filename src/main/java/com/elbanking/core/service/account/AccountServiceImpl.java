@@ -4,12 +4,15 @@ import com.elbanking.core.mapper.account.AccountMapper;
 import com.elbanking.core.model.account.AccountDAO;
 import com.elbanking.core.model.account.AccountDO;
 import com.elbanking.core.repository.AccountRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.javamoney.moneta.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -18,6 +21,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    // used for refreshing entity after update
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public AccountDAO insertAccount(AccountDAO accountDAO) {
@@ -30,8 +37,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDAO queryAccountById(String id) {
-        Optional<AccountDO> queriedAccountDO = accountRepository.findById(id).stream().findFirst();
+    public AccountDAO queryAccountById(String accountId) {
+        UUID accountUUID = UUID.fromString(accountId);
+        Optional<AccountDO> queriedAccountDO = accountRepository.findById(accountUUID).stream().findFirst();
         if(queriedAccountDO.isPresent() == false){
             return null;
         }
@@ -40,14 +48,20 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public AccountDAO addBalance(String accountId, Long amount) {
-        AccountDO accountDO = accountRepository.addBalance(accountId,amount);
+        UUID accountUUID = UUID.fromString(accountId);
+        AccountDO accountDO = accountRepository.addBalance(accountUUID,amount);
+        entityManager.refresh(accountDO);
         return accountMapper.convertToAccountDAO(accountDO);
     }
 
     @Override
+    @Transactional
     public AccountDAO subtractBalance(String accountId, Long amount) {
-        AccountDO accountDO = accountRepository.subtractBalance(accountId,amount);
+        UUID accountUUID = UUID.fromString(accountId);
+        AccountDO accountDO = accountRepository.subtractBalance(accountUUID,amount);
+        entityManager.refresh(accountDO);
         return accountMapper.convertToAccountDAO(accountDO);
     }
 }

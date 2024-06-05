@@ -1,12 +1,12 @@
 package com.elbanking.core.manager.user;
 
+import com.elbanking.core.constant.account.AccountConstant;
 import com.elbanking.core.enums.CoreException;
 import com.elbanking.core.enums.StatusCodeEnum;
 import com.elbanking.core.mapper.user.UserMapper;
 import com.elbanking.core.model.account.AccountDAO;
 import com.elbanking.core.model.user.RegisterUserRequest;
 import com.elbanking.core.model.user.RegisterUserResult;
-import com.elbanking.core.model.user.RegisterUserView;
 import com.elbanking.core.model.user.UserDAO;
 import com.elbanking.core.service.account.AccountService;
 import com.elbanking.core.service.user.UserService;
@@ -15,7 +15,6 @@ import org.javamoney.moneta.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 
@@ -59,7 +58,7 @@ public class UserManagerImpl implements UserManager{
         AccountDAO accountDAO = AccountDAO
                 .builder()
                 .userId(createdUser.getId())
-                .balance(initialBalance)
+                .balanceValue(AccountConstant.INITIAL_BALANCE)
                 .build();
 
         accountService.insertAccount(accountDAO);

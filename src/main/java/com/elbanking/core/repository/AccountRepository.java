@@ -9,12 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
-public interface AccountRepository extends CrudRepository<AccountDO,String> {
+public interface AccountRepository extends CrudRepository<AccountDO, UUID> {
     @Query(value = "SELECT * FROM accounts WHERE user_id = ?1", nativeQuery = true)
     AccountDO findByUserId(String userId);
 
-    @Modifying
     @Query
             (value =
                     """
@@ -24,7 +25,7 @@ public interface AccountRepository extends CrudRepository<AccountDO,String> {
                     RETURNING *;
                     """
                     , nativeQuery = true)
-    AccountDO addBalance(String userId, Long amount);
+    AccountDO addBalance(UUID userId, Long amount);
 
     @Query
             (value =
@@ -35,5 +36,5 @@ public interface AccountRepository extends CrudRepository<AccountDO,String> {
                     RETURNING *;
                     """
             , nativeQuery = true)
-    AccountDO subtractBalance(String userId, Long amount);
+    AccountDO subtractBalance(UUID userId, Long amount);
 }

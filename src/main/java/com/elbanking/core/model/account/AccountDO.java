@@ -11,8 +11,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
 import java.util.Date;
 import java.util.UUID;
 
@@ -24,7 +22,7 @@ import java.util.UUID;
 @Table(name = "accounts")
 public class AccountDO {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.UUID)
     private UUID id;
     @Column(name = "user_id")
     private UUID userId;

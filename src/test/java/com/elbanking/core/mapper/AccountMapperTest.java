@@ -31,7 +31,7 @@ public class AccountMapperTest {
                    .builder()
                    .id(UUID.randomUUID().toString())
                    .userId(UUID.randomUUID().toString())
-                   .balance(balance)
+                   .balanceValue(50000000L)
                    .gmtCreate(new Date())
                    .gmtModified(new Date())
                    .build();

@@ -15,7 +15,12 @@ import java.util.Date;
 public class AccountDAO {
     private String id;
     private String userId;
-    private Money balance;
+    /**
+     * balanceValue stored in cent form
+     * For example, IDR500000.12 will be stored as 50000012
+     */
+    private Long balanceValue;
+    private String balanceCurrency;
     private Date gmtCreate;
     private Date gmtModified;
 }
