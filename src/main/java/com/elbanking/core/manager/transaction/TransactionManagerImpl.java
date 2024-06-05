@@ -42,6 +42,8 @@ public class TransactionManagerImpl implements TransactionManager{
             throw new CoreException(StatusCodeEnum.INVALID_TRANSACTION_TYPE);
         }
 
+
+
         return InsertTransactionResult.builder()
                 .remainingBalance(updatedAccountDAO.getBalanceValue())
                 .build();
