@@ -7,6 +7,8 @@ import com.elbanking.core.model.HTTPResult;
 import com.elbanking.core.model.ResultData;
 import com.elbanking.core.model.transaction.InsertTransactionRequest;
 import com.elbanking.core.model.transaction.InsertTransactionResult;
+import com.elbanking.core.model.transaction.QueryTransactionRequest;
+import com.elbanking.core.model.transaction.QueryTransactionResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +29,28 @@ public class TransactionController {
         try{
             InsertTransactionResult insertTransactionResult = transactionManager.insertTransaction(insertTransactionRequest);
             resultData = insertTransactionResult;
+            statusCode = StatusCodeEnum.SUCCESS;
+        }catch(CoreException e){
+            statusCode = e.getStatusCode();
+        }
+        HTTPResult httpResult = HTTPResult
+                .builder()
+                .status(statusCode.getHttpStatusCode())
+                .message(statusCode.getMessage())
+                .data(resultData).build();
+        return ResponseEntity
+                .status(statusCode.getHttpStatusCode())
+                .body(httpResult);
+    }
+
+    @PostMapping("/getStatement")
+    public ResponseEntity<HTTPResult> queryStatement(@RequestBody QueryTransactionRequest queryTransactionRequest){
+        ResultData resultData = null;
+        StatusCodeEnum statusCode;
+
+        try{
+            QueryTransactionResult queryTransactionResult = transactionManager.queryTransaction(queryTransactionRequest);
+            resultData = queryTransactionResult;
             statusCode = StatusCodeEnum.SUCCESS;
         }catch(CoreException e){
             statusCode = e.getStatusCode();

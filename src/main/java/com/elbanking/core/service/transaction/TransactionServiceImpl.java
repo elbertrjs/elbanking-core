@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TransactionServiceImpl implements TransactionService{
@@ -24,5 +26,12 @@ public class TransactionServiceImpl implements TransactionService{
         TransactionDO transactionDO = transactionMapper.convertToTransactionDO(transactionDAO);
         TransactionDO createdTransactioDO = transactionRepository.save(transactionDO);
         return transactionMapper.convertToTransactionDAO(createdTransactioDO);
+    }
+
+    @Override
+    public List<TransactionDAO> queryTransactionsByAccountId(String accountId) {
+        UUID accountUUID = UUID.fromString(accountId);
+        List<TransactionDO> transactionDOList = transactionRepository.findAllByAccountId(accountUUID);
+        return transactionMapper.convertToTransactionDAOList(transactionDOList);
     }
 }
