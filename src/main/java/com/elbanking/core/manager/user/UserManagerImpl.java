@@ -24,9 +24,6 @@ public class UserManagerImpl implements UserManager{
     private AccountService accountService;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -57,9 +54,14 @@ public class UserManagerImpl implements UserManager{
                 .balanceCurrency(AccountConstant.DEFAULT_CURRENCY)
                 .build();
 
-        accountService.insertAccount(accountDAO);
+        AccountDAO createdAccountDAO = accountService.insertAccount(accountDAO);
 
-        return userMapper.convertToRegisterUserResult(createdUser);
+        return RegisterUserResult.builder()
+                .userId(createdUser.getUserId())
+                .accountId(createdAccountDAO.getAccountId())
+                .initialBalance(createdAccountDAO.getBalanceValue())
+                .accountCurrency(createdAccountDAO.getBalanceCurrency())
+                .build();
 
     }
 }

@@ -11,4 +11,7 @@ import lombok.experimental.SuperBuilder;
 @Builder
 public class RegisterUserResult extends ResultData {
     private String userId;
+    private String accountId;
+    private Long initialBalance;
+    private String accountCurrency;
 }
