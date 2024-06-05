@@ -10,7 +10,8 @@ public enum StatusCodeEnum {
     SUCCESS(HttpStatus.OK.value(),"00000","Success"),
     INVALID_EMAIL_FORMAT(HttpStatus.BAD_REQUEST.value(), "00001","Invalid email format"),
     USER_EXISTS(HttpStatus.CONFLICT.value(), "00002","User already exist"),
-    BALANCE_INSUFFICIENT(HttpStatus.UNPROCESSABLE_ENTITY.value(), "00003","Balance insufficient");
+    BALANCE_INSUFFICIENT(HttpStatus.UNPROCESSABLE_ENTITY.value(), "00003","Balance insufficient"),
+    INVALID_TRANSACTION_TYPE(HttpStatus.BAD_REQUEST.value(),"00004","Invalid transaction type");
 
     private Integer httpStatusCode;
     private String internalStatusCode;

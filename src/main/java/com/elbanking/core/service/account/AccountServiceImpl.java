@@ -4,6 +4,7 @@ import com.elbanking.core.mapper.account.AccountMapper;
 import com.elbanking.core.model.account.AccountDAO;
 import com.elbanking.core.model.account.AccountDO;
 import com.elbanking.core.repository.AccountRepository;
+import org.javamoney.moneta.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,18 @@ public class AccountServiceImpl implements AccountService {
             return null;
         }
         AccountDO accountDO = queriedAccountDO.get();
+        return accountMapper.convertToAccountDAO(accountDO);
+    }
+
+    @Override
+    public AccountDAO addBalance(String accountId, Long amount) {
+        AccountDO accountDO = accountRepository.addBalance(accountId,amount);
+        return accountMapper.convertToAccountDAO(accountDO);
+    }
+
+    @Override
+    public AccountDAO subtractBalance(String accountId, Long amount) {
+        AccountDO accountDO = accountRepository.subtractBalance(accountId,amount);
         return accountMapper.convertToAccountDAO(accountDO);
     }
 }

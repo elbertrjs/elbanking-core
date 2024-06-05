@@ -1,9 +1,14 @@
 package com.elbanking.core.service.account;
 
 import com.elbanking.core.model.account.AccountDAO;
+import org.javamoney.moneta.Money;
 
 public interface AccountService {
-    public AccountDAO insertAccount(AccountDAO accountDAO);
+    AccountDAO insertAccount(AccountDAO accountDAO);
 
-    public AccountDAO queryAccountById(String id);
+    AccountDAO queryAccountById(String id);
+
+    AccountDAO addBalance(String accountId, Long amount);
+
+    AccountDAO subtractBalance(String accountId, Long amount);
 }
