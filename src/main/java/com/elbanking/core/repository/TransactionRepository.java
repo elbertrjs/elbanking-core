@@ -1,9 +1,12 @@
 package com.elbanking.core.repository;
 
-import com.elbanking.core.model.user.UserDO;
-import org.springframework.data.jpa.repository.Query;
+import com.elbanking.core.model.transaction.TransactionDO;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface TransactionRepository {
-    @Query(value = "SELECT * FROM users WHERE email = ?1", nativeQuery = true)
-    UserDO findByEmail(String emailAddress);
+import java.util.UUID;
+
+@Repository
+public interface TransactionRepository extends CrudRepository<TransactionDO, UUID> {
+
 }
