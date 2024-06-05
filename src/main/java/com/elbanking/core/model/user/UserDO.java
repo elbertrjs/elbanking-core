@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
 import java.util.Date;
 import java.util.UUID;
@@ -24,7 +23,8 @@ import java.util.UUID;
 public class UserDO {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private UUID id;
+    @Column(name = "user_id")
+    private UUID userId;
     private String email;
     private String password;
     @Column(name = "gmt_create")

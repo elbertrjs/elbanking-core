@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class UserDAO {
-    private String id;
+    private String userId;
     private String email;
     private String password;
     private Date gmtCreate;

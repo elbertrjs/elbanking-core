@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class RegisterUserView extends ResultData {
-    private String id;
+    private String userId;
     private String email;
 }

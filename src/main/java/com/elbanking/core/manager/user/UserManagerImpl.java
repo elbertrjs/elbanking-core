@@ -11,12 +11,9 @@ import com.elbanking.core.model.user.UserDAO;
 import com.elbanking.core.service.account.AccountService;
 import com.elbanking.core.service.user.UserService;
 import com.elbanking.core.util.EmailUtil;
-import org.javamoney.moneta.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 
 @Service
 public class UserManagerImpl implements UserManager{
@@ -53,11 +50,9 @@ public class UserManagerImpl implements UserManager{
 
         UserDAO createdUser = userService.insertUser(userToRegister);
 
-        Money initialBalance = Money.of(new BigDecimal(500000),"IDR");
-
         AccountDAO accountDAO = AccountDAO
                 .builder()
-                .userId(createdUser.getId())
+                .userId(createdUser.getUserId())
                 .balanceValue(AccountConstant.INITIAL_BALANCE)
                 .build();
 

@@ -21,20 +21,20 @@ public interface AccountRepository extends CrudRepository<AccountDO, UUID> {
                     """
                     UPDATE accounts
                     set balance_value = balance_value + ?2
-                    where id = ?1
+                    where account_id = ?1
                     RETURNING *;
                     """
                     , nativeQuery = true)
-    AccountDO addBalance(UUID userId, Long amount);
+    AccountDO addBalance(UUID accountId, Long amount);
 
     @Query
             (value =
                     """
                     UPDATE accounts
                     set balance_value = balance_value - ?2
-                    where id = ?1
+                    where account_id = ?1
                     RETURNING *;
                     """
             , nativeQuery = true)
-    AccountDO subtractBalance(UUID userId, Long amount);
+    AccountDO subtractBalance(UUID accountId, Long amount);
 }

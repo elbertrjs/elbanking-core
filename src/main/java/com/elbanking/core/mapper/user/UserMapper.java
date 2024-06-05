@@ -13,6 +13,5 @@ public interface UserMapper {
 
     UserDAO convertToUserDAO(UserDO userDo);
 
-    @Mapping(source = "id", target = "userId")
     RegisterUserResult convertToRegisterUserResult(UserDAO userDAO);
 }

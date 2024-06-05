@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.javamoney.moneta.Money;
 
 import java.util.Date;
 
@@ -13,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class AccountDAO {
-    private String id;
+    private String accountId;
     private String userId;
     /**
      * balanceValue stored in cent form

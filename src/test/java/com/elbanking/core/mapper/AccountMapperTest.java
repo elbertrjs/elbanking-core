@@ -29,7 +29,7 @@ public class AccountMapperTest {
         Money balance = Money.of(new BigDecimal("123.123"),"IDR");
            AccountDAO accountDAO = AccountDAO
                    .builder()
-                   .id(UUID.randomUUID().toString())
+                   .accountId(UUID.randomUUID().toString())
                    .userId(UUID.randomUUID().toString())
                    .balanceValue(50000000L)
                    .gmtCreate(new Date())
@@ -44,7 +44,7 @@ public class AccountMapperTest {
     public void testConvertToAccountDAO(){
         AccountDO accountDO = AccountDO
                 .builder()
-                .id(UUID.randomUUID())
+                .accountId(UUID.randomUUID())
                 .userId(UUID.randomUUID())
                 .balanceCurrency("IDR")
                 .balanceValue(12312L)

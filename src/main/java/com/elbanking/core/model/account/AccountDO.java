@@ -23,7 +23,8 @@ import java.util.UUID;
 public class AccountDO {
     @Id
     @GeneratedValue(strategy= GenerationType.UUID)
-    private UUID id;
+    @Column(name = "account_id")
+    private UUID accountId;
     @Column(name = "user_id")
     private UUID userId;
     @Column(name = "balance_value")
