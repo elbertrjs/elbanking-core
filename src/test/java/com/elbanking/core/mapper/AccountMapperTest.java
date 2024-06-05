@@ -1,5 +1,6 @@
 package com.elbanking.core.mapper;
 
+import com.elbanking.core.constant.account.AccountConstant;
 import com.elbanking.core.mapper.account.AccountMapper;
 import com.elbanking.core.mapper.account.AccountMapperImpl;
 import com.elbanking.core.model.account.AccountDAO;
@@ -26,7 +27,7 @@ public class AccountMapperTest {
 
     @Test
     public void testConvertToAccountDO(){
-        Money balance = Money.of(new BigDecimal("123.123"),"IDR");
+        Money balance = Money.of(new BigDecimal("123.123"), AccountConstant.DEFAULT_CURRENCY);
            AccountDAO accountDAO = AccountDAO
                    .builder()
                    .accountId(UUID.randomUUID().toString())
@@ -46,7 +47,7 @@ public class AccountMapperTest {
                 .builder()
                 .accountId(UUID.randomUUID())
                 .userId(UUID.randomUUID())
-                .balanceCurrency("IDR")
+                .balanceCurrency(AccountConstant.DEFAULT_CURRENCY)
                 .balanceValue(12312L)
                 .gmtCreate(new Date())
                 .gmtModified(new Date())

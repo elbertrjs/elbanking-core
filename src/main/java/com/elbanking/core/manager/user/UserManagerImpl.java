@@ -54,6 +54,7 @@ public class UserManagerImpl implements UserManager{
                 .builder()
                 .userId(createdUser.getUserId())
                 .balanceValue(AccountConstant.INITIAL_BALANCE)
+                .balanceCurrency(AccountConstant.DEFAULT_CURRENCY)
                 .build();
 
         accountService.insertAccount(accountDAO);
