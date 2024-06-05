@@ -20,7 +20,8 @@ public interface AccountRepository extends CrudRepository<AccountDO, UUID> {
             (value =
                     """
                     UPDATE accounts
-                    set balance_value = balance_value + ?2
+                    set balance_value = balance_value + ?2,
+                    gmt_modified = current_timestamp
                     where account_id = ?1
                     RETURNING *;
                     """
@@ -31,7 +32,8 @@ public interface AccountRepository extends CrudRepository<AccountDO, UUID> {
             (value =
                     """
                     UPDATE accounts
-                    set balance_value = balance_value - ?2
+                    set balance_value = balance_value - ?2,
+                    gmt_modified = current_timestamp
                     where account_id = ?1
                     RETURNING *;
                     """
