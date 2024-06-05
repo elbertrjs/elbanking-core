@@ -20,7 +20,7 @@ public class TransactionController {
     private TransactionManager transactionManager;
 
     @PostMapping("/transactions")
-    public ResponseEntity<HTTPResult> signUp(@RequestBody InsertTransactionRequest insertTransactionRequest){
+    public ResponseEntity<HTTPResult> submitTransaction(@RequestBody InsertTransactionRequest insertTransactionRequest){
         ResultData resultData = null;
         StatusCodeEnum statusCode;
 
