@@ -36,9 +36,20 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDAO queryAccountById(String accountId) {
+    public AccountDAO queryAccountByAccountId(String accountId) {
         UUID accountUUID = UUID.fromString(accountId);
         Optional<AccountDO> queriedAccountDO = accountRepository.findById(accountUUID).stream().findFirst();
+        if(queriedAccountDO.isPresent() == false){
+            return null;
+        }
+        AccountDO accountDO = queriedAccountDO.get();
+        return accountMapper.convertToAccountDAO(accountDO);
+    }
+
+    @Override
+    public AccountDAO queryAccountByUserId(String userId) {
+        UUID userUUID = UUID.fromString(userId);
+        Optional<AccountDO> queriedAccountDO = accountRepository.findByUserId(userUUID).stream().findFirst();
         if(queriedAccountDO.isPresent() == false){
             return null;
         }

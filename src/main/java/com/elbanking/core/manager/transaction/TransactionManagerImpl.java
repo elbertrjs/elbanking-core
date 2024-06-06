@@ -12,6 +12,7 @@ import com.elbanking.core.model.transaction.QueryTransactionResult;
 import com.elbanking.core.model.transaction.TransactionDAO;
 import com.elbanking.core.model.transaction.TransactionView;
 import com.elbanking.core.service.account.AccountService;
+import com.elbanking.core.service.authentication.JwtService;
 import com.elbanking.core.service.transaction.TransactionService;
 import com.elbanking.core.util.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +31,16 @@ public class TransactionManagerImpl implements TransactionManager{
     @Autowired
     private TransactionMapper transactionMapper;
 
+    @Autowired
+    private JwtService jwtService;
     @Override
     public InsertTransactionResult insertTransaction(InsertTransactionRequest insertTransactionRequest) {
-        if(IdUtil.isValidUUID(insertTransactionRequest.getAccountId()) == false){
+        String userId = jwtService.extractUserId(insertTransactionRequest.getAccessToken());
+        if(IdUtil.isValidUUID(userId) == false){
             throw new CoreException(StatusCodeEnum.INVALID_ID);
         }
 
-        AccountDAO queriedAccountDAO = accountService.queryAccountById(insertTransactionRequest.getAccountId());
+        AccountDAO queriedAccountDAO = accountService.queryAccountByUserId(userId);
 
         if(queriedAccountDAO == null){
             throw new CoreException(StatusCodeEnum.ACCOUNT_NOT_FOUND);
@@ -49,10 +53,10 @@ public class TransactionManagerImpl implements TransactionManager{
                 throw new CoreException(StatusCodeEnum.BALANCE_INSUFFICIENT);
             }
 
-            updatedAccountDAO = accountService.subtractBalance(insertTransactionRequest.getAccountId(),insertTransactionRequest.getAmount());
+            updatedAccountDAO = accountService.subtractBalance(queriedAccountDAO.getAccountId(),insertTransactionRequest.getAmount());
         }else if(transactionType == TransactionTypeEnum.DEBIT){
 
-            updatedAccountDAO = accountService.addBalance(insertTransactionRequest.getAccountId(), insertTransactionRequest.getAmount());
+            updatedAccountDAO = accountService.addBalance(queriedAccountDAO.getAccountId(), insertTransactionRequest.getAmount());
         }else{
             throw new CoreException(StatusCodeEnum.INVALID_TRANSACTION_TYPE);
         }
@@ -76,15 +80,16 @@ public class TransactionManagerImpl implements TransactionManager{
 
     @Override
     public QueryTransactionResult queryTransaction(QueryTransactionRequest queryTransactionRequest) {
-        if(IdUtil.isValidUUID(queryTransactionRequest.getAccountId()) == false){
+        String userId = jwtService.extractUserId(queryTransactionRequest.getAccessToken());
+        if(IdUtil.isValidUUID(userId) == false){
             throw new CoreException(StatusCodeEnum.INVALID_ID);
         }
 
-        AccountDAO queriedAccountDAO = accountService.queryAccountById(queryTransactionRequest.getAccountId());
+        AccountDAO queriedAccountDAO = accountService.queryAccountByUserId(userId);
         if(queriedAccountDAO == null){
             throw new CoreException(StatusCodeEnum.ACCOUNT_NOT_FOUND);
         }
-        List<TransactionDAO> transactionDAOList = transactionService.queryTransactionsByAccountId(queryTransactionRequest.getAccountId());
+        List<TransactionDAO> transactionDAOList = transactionService.queryTransactionsByAccountId(queriedAccountDAO.getAccountId());
         List<TransactionView> transactionViewlist = transactionMapper.convertToTransactionViewList(transactionDAOList);
 
         return QueryTransactionResult.builder()

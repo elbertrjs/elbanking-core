@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class QueryAccountRequest {
-    private String accountId;
+    private String accessToken;
 }

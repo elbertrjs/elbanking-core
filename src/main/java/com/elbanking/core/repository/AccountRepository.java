@@ -1,20 +1,18 @@
 package com.elbanking.core.repository;
 
 
-import com.elbanking.core.model.account.AccountDAO;
 import com.elbanking.core.model.account.AccountDO;
-import com.elbanking.core.model.user.UserDO;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface AccountRepository extends CrudRepository<AccountDO, UUID> {
     @Query(value = "SELECT * FROM accounts WHERE user_id = ?1", nativeQuery = true)
-    AccountDO findByUserId(String userId);
+    Optional<AccountDO> findByUserId(UUID userId);
 
     @Query
             (value =

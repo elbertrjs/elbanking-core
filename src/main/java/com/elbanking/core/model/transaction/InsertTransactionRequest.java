@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class InsertTransactionRequest {
     private String idempotencyKey;
-    private String accountId;
+    private String accessToken;
     private Long amount;
     private String type;
     private String note;
