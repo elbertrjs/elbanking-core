@@ -1,4 +1,4 @@
-package com.elbanking.core.controller.authentication;
+package com.elbanking.core.handler.authentication;
 
 import com.elbanking.core.enums.StatusCodeEnum;
 import com.elbanking.core.model.HTTPResult;

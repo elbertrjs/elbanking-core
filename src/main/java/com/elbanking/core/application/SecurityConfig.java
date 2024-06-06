@@ -1,6 +1,6 @@
 package com.elbanking.core.application;
 
-import com.elbanking.core.controller.authentication.CustomAuthenticationEntryPoint;
+import com.elbanking.core.handler.authentication.CustomAuthenticationEntryPoint;
 import com.elbanking.core.filter.JwtAuthFilter;
 import com.elbanking.core.service.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
