@@ -1,5 +1,6 @@
 package com.elbanking.core.application;
 
+import com.elbanking.core.controller.authentication.CustomAuthenticationEntryPoint;
 import com.elbanking.core.filter.JwtAuthFilter;
 import com.elbanking.core.service.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,14 @@ public class SecurityConfig{
         return userService;
     }
 
+
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+
+    public SecurityConfig(@Autowired CustomAuthenticationEntryPoint authenticationEntryPoint) {
+        this.authenticationEntryPoint = authenticationEntryPoint;
+    }
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
@@ -37,6 +46,7 @@ public class SecurityConfig{
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(t -> t.authenticationEntryPoint(authenticationEntryPoint))
                 .build();
     }
 

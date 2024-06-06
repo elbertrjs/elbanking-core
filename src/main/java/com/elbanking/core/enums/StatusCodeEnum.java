@@ -13,7 +13,8 @@ public enum StatusCodeEnum {
     INVALID_TRANSACTION_TYPE(HttpStatus.BAD_REQUEST.value(),"00004","Invalid transaction type"),
     INVALID_ID(HttpStatus.BAD_REQUEST.value(),"00005","Invalid id"),
     ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND.value(),"00006","Account not found"),
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND.value(),"00007","User not found"),;
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND.value(),"00007","User not found"),
+    INVALID_CREDENTIAL(HttpStatus.UNAUTHORIZED.value(),"00008","Invalid access token");
     private Integer httpStatusCode;
     private String internalStatusCode;
     private String message;
