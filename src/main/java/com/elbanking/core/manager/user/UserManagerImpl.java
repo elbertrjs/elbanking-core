@@ -69,9 +69,14 @@ public class UserManagerImpl implements UserManager{
 
         AccountDAO createdAccountDAO = accountService.insertAccount(accountDAO);
 
+        String accessToken = authenticate(
+                AuthRequest.builder()
+                        .email(registerUserRequest.getEmail())
+                        .password(registerUserRequest.getPassword())
+                        .build()
+        );
         return RegisterUserResult.builder()
-                .userId(createdUser.getUserId())
-                .accountId(createdAccountDAO.getAccountId())
+                .accessToken(accessToken)
                 .initialBalance(createdAccountDAO.getBalanceValue())
                 .accountCurrency(createdAccountDAO.getBalanceCurrency())
                 .build();
