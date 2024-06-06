@@ -1,10 +1,9 @@
 package com.elbanking.core.mapper.user;
 
-import com.elbanking.core.model.user.RegisterUserResult;
 import com.elbanking.core.model.user.UserDAO;
 import com.elbanking.core.model.user.UserDO;
+import com.elbanking.core.service.authentication.UserInfoDetails;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
@@ -13,5 +12,6 @@ public interface UserMapper {
 
     UserDAO convertToUserDAO(UserDO userDo);
 
-    RegisterUserResult convertToRegisterUserResult(UserDAO userDAO);
+    UserInfoDetails convertToUserInfoDetails(UserDAO userDAO);
+
 }

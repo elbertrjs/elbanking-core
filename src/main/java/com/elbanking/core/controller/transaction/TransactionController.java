@@ -1,6 +1,7 @@
 package com.elbanking.core.controller.transaction;
 
 import com.elbanking.core.enums.CoreException;
+import com.elbanking.core.enums.RoleConstant;
 import com.elbanking.core.enums.StatusCodeEnum;
 import com.elbanking.core.manager.transaction.TransactionManager;
 import com.elbanking.core.model.HTTPResult;
@@ -11,6 +12,7 @@ import com.elbanking.core.model.transaction.QueryTransactionRequest;
 import com.elbanking.core.model.transaction.QueryTransactionResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +24,7 @@ public class TransactionController {
     private TransactionManager transactionManager;
 
     @PostMapping("/transactions")
+    @PreAuthorize("hasAuthority('" + RoleConstant.ROLE_USER +"')")
     public ResponseEntity<HTTPResult> submitTransaction(@RequestBody InsertTransactionRequest insertTransactionRequest){
         ResultData resultData = null;
         StatusCodeEnum statusCode;
@@ -44,6 +47,7 @@ public class TransactionController {
     }
 
     @PostMapping("/getStatement")
+    @PreAuthorize("hasAuthority('" + RoleConstant.ROLE_USER +"')")
     public ResponseEntity<HTTPResult> queryStatement(@RequestBody QueryTransactionRequest queryTransactionRequest){
         ResultData resultData = null;
         StatusCodeEnum statusCode;

@@ -26,6 +26,7 @@ public class UserDO {
     @Column(name = "user_id")
     private UUID userId;
     private String email;
+    private String roles;
     private String password;
     @Column(name = "gmt_create")
     private Date gmtCreate;

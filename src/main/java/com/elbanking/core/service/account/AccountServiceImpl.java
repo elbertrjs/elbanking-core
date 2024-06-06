@@ -6,7 +6,6 @@ import com.elbanking.core.model.account.AccountDO;
 import com.elbanking.core.repository.AccountRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import org.javamoney.moneta.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

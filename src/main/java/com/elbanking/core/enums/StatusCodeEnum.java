@@ -1,6 +1,5 @@
 package com.elbanking.core.enums;
 
-import com.elbanking.core.model.HTTPResult;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -13,7 +12,8 @@ public enum StatusCodeEnum {
     BALANCE_INSUFFICIENT(HttpStatus.UNPROCESSABLE_ENTITY.value(), "00003","Balance insufficient"),
     INVALID_TRANSACTION_TYPE(HttpStatus.BAD_REQUEST.value(),"00004","Invalid transaction type"),
     INVALID_ID(HttpStatus.BAD_REQUEST.value(),"00005","Invalid id"),
-    ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND.value(),"00006","Account not found");
+    ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND.value(),"00006","Account not found"),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND.value(),"00007","User not found"),;
     private Integer httpStatusCode;
     private String internalStatusCode;
     private String message;

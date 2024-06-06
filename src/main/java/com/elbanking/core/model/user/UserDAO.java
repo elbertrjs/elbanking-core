@@ -14,6 +14,7 @@ import java.util.Date;
 public class UserDAO {
     private String userId;
     private String email;
+    private String roles;
     private String password;
     private Date gmtCreate;
     private Date gmtModified;
