@@ -6,6 +6,7 @@ import com.elbanking.core.manager.user.UserManager;
 import com.elbanking.core.model.HTTPResult;
 import com.elbanking.core.model.ResultData;
 import com.elbanking.core.model.authentication.AuthRequest;
+import com.elbanking.core.model.authentication.AuthResult;
 import com.elbanking.core.model.user.RegisterUserRequest;
 import com.elbanking.core.model.user.RegisterUserResult;
 import com.elbanking.core.service.authentication.JwtService;
@@ -31,8 +32,7 @@ public class UserController {
         StatusCodeEnum statusCode;
 
         try{
-            RegisterUserResult registerUserResult = userManager.registerUser(registerUserRequest);
-            resultData = registerUserResult;
+            resultData = userManager.registerUser(registerUserRequest);
             statusCode = StatusCodeEnum.SUCCESS;
         }catch(CoreException e){
             statusCode = e.getStatusCode();
@@ -48,8 +48,24 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody AuthRequest authRequest) {
-        String accessToken = userManager.authenticate(authRequest);
-        return accessToken;
+    public ResponseEntity<HTTPResult> login(@RequestBody AuthRequest authRequest) {
+        ResultData resultData = null;
+        StatusCodeEnum statusCode;
+
+        try{
+            resultData = userManager.authenticate(authRequest);
+            statusCode = StatusCodeEnum.SUCCESS;
+        }catch(CoreException e){
+            statusCode = e.getStatusCode();
+        }
+        HTTPResult httpResult = HTTPResult
+                .builder()
+                .status(statusCode.getHttpStatusCode())
+                .message(statusCode.getMessage())
+                .data(resultData).build();
+        return ResponseEntity
+                .status(statusCode.getHttpStatusCode())
+                .body(httpResult);
+
     }
 }

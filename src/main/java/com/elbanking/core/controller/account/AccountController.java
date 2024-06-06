@@ -28,8 +28,7 @@ public class AccountController {
         StatusCodeEnum statusCode;
 
         try{
-            QueryAccountResult queryAccountResult = accountManager.queryAccount(queryAccountRequest);
-            resultData = queryAccountResult;
+            resultData = accountManager.queryAccount(queryAccountRequest);
             statusCode = StatusCodeEnum.SUCCESS;
         }catch(CoreException e){
             statusCode = e.getStatusCode();

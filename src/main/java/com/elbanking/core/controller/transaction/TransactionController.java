@@ -53,8 +53,7 @@ public class TransactionController {
         StatusCodeEnum statusCode;
 
         try{
-            QueryTransactionResult queryTransactionResult = transactionManager.queryTransaction(queryTransactionRequest);
-            resultData = queryTransactionResult;
+            resultData = transactionManager.queryTransaction(queryTransactionRequest);
             statusCode = StatusCodeEnum.SUCCESS;
         }catch(CoreException e){
             statusCode = e.getStatusCode();

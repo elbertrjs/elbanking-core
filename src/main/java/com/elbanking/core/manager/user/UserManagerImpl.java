@@ -6,6 +6,7 @@ import com.elbanking.core.enums.RoleConstant;
 import com.elbanking.core.enums.StatusCodeEnum;
 import com.elbanking.core.model.account.AccountDAO;
 import com.elbanking.core.model.authentication.AuthRequest;
+import com.elbanking.core.model.authentication.AuthResult;
 import com.elbanking.core.model.user.RegisterUserRequest;
 import com.elbanking.core.model.user.RegisterUserResult;
 import com.elbanking.core.model.user.UserDAO;
@@ -69,14 +70,14 @@ public class UserManagerImpl implements UserManager{
 
         AccountDAO createdAccountDAO = accountService.insertAccount(accountDAO);
 
-        String accessToken = authenticate(
+        AuthResult authResult = authenticate(
                 AuthRequest.builder()
                         .email(registerUserRequest.getEmail())
                         .password(registerUserRequest.getPassword())
                         .build()
         );
         return RegisterUserResult.builder()
-                .accessToken(accessToken)
+                .accessToken(authResult.getAccessToken())
                 .initialBalance(createdAccountDAO.getBalanceValue())
                 .accountCurrency(createdAccountDAO.getBalanceCurrency())
                 .build();
@@ -84,11 +85,14 @@ public class UserManagerImpl implements UserManager{
     }
 
     @Override
-    public String authenticate(AuthRequest authRequest) {
+    public AuthResult authenticate(AuthRequest authRequest) {
         UserDAO queriedUser = userService.queryUserByEmail(authRequest.getEmail());
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(queriedUser.getUserId(), authRequest.getPassword()));
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(queriedUser.getUserId());
+            String accessToken = jwtService.generateToken(queriedUser.getUserId());
+            return AuthResult.builder()
+                    .accessToken(accessToken)
+                    .build();
         } else {
             throw new UsernameNotFoundException("invalid user request !");
         }
