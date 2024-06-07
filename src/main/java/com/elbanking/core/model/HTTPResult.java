@@ -15,8 +15,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class HTTPResult {
+public class HTTPResult<T> {
     private final Integer status;
     private final String message;
-    private ResultData data;
+    private T data;
 }

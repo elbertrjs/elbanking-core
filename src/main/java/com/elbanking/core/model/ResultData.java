@@ -1,4 +1,7 @@
 package com.elbanking.core.model;
 
-public abstract class ResultData {
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@JsonSerialize
+public class ResultData {
 }
