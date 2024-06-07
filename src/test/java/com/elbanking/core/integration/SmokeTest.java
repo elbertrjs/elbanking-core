@@ -8,6 +8,9 @@ import com.elbanking.core.model.HTTPResult;
 import com.elbanking.core.model.authentication.AuthRequest;
 import com.elbanking.core.model.authentication.AuthResult;
 import com.elbanking.core.model.transaction.InsertTransactionRequest;
+import com.elbanking.core.model.transaction.QueryTransactionRequest;
+import com.elbanking.core.model.transaction.QueryTransactionResult;
+import com.elbanking.core.model.transaction.TransactionView;
 import com.elbanking.core.model.user.RegisterUserRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,6 +52,9 @@ class SmokeTest {
     private final String email = "test123@gmail.com";
     private final String password = "123456";
 
+    private final Long creditAmount = 7500000L;
+    private final Long debitAmount = 5000000L;
+
     @Test
     void smoke_test() throws Exception {
         objectMapper = new ObjectMapper();
@@ -57,6 +63,7 @@ class SmokeTest {
 
         insertTransaction(accessToken);
 
+        getStatement(accessToken);
     }
 
     @AfterEach
@@ -118,13 +125,11 @@ class SmokeTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
 
-        Long creditAmount = 7500000L;
-        Long debitAmount = 5000000L;
 
         InsertTransactionRequest creditRequest = InsertTransactionRequest
                 .builder()
                 .accessToken(accessToken)
-                .amount(7500000L)
+                .amount(creditAmount)
                 .type(TransactionTypeEnum.CREDIT.name())
                 .note("Electricity bill")
                 .build();
@@ -132,7 +137,7 @@ class SmokeTest {
         InsertTransactionRequest debitRequest = InsertTransactionRequest
                 .builder()
                 .accessToken(accessToken)
-                .amount(5000000L)
+                .amount(debitAmount)
                 .type(TransactionTypeEnum.DEBIT.name())
                 .note("Freelance payment")
                 .build();
@@ -152,6 +157,34 @@ class SmokeTest {
         return expectedRemainingBalance;
     }
 
+    private void getStatement(String accessToken){
+        String url = buildUrl("/getStatement");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(accessToken);
+
+        QueryTransactionRequest queryTransactionRequest = QueryTransactionRequest
+                .builder()
+                .accessToken(accessToken)
+                .build();
+
+        HttpEntity<QueryTransactionRequest> queryTransactionRequestHttpEntity = new HttpEntity<>(queryTransactionRequest,headers);
+        ResponseEntity<HTTPResult> queryTransactionResponseEntity = this.restTemplate.exchange(url, HttpMethod.POST,queryTransactionRequestHttpEntity,HTTPResult.class);
+
+        Assertions.assertThat(queryTransactionResponseEntity).isNotNull();
+        Assertions.assertThat(queryTransactionResponseEntity.getBody().getStatus()).isEqualTo(StatusCodeEnum.SUCCESS.getHttpStatusCode());
+
+        QueryTransactionResult queryTransactionResult = (QueryTransactionResult) convertDataToPojo(queryTransactionResponseEntity.getBody().getData(),QueryTransactionResult.class);
+        List<TransactionView> transactionViewList = queryTransactionResult.getTransactionList();
+        TransactionView creditTransaction = transactionViewList.get(0);
+        TransactionView debitTransaction = transactionViewList.get(1);
+
+        Assertions.assertThat(creditTransaction.getTransactionValue()).isEqualTo(creditAmount);
+        Assertions.assertThat(creditTransaction.getType()).isEqualTo(TransactionTypeEnum.CREDIT.getCode());
+
+        Assertions.assertThat(debitTransaction.getTransactionValue()).isEqualTo(debitAmount);
+        Assertions.assertThat(debitTransaction.getType()).isEqualTo(TransactionTypeEnum.DEBIT.getCode());
+
+    }
     private void printResponseJsonString(ResponseEntity responseEntity){
         try {
             System.out.println(objectMapper.writer().withDefaultPrettyPrinter().writeValueAsString(responseEntity));
