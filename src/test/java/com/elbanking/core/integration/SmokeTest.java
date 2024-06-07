@@ -5,6 +5,8 @@ import com.elbanking.core.constant.account.AccountConstant;
 import com.elbanking.core.enums.StatusCodeEnum;
 import com.elbanking.core.enums.TransactionTypeEnum;
 import com.elbanking.core.model.HTTPResult;
+import com.elbanking.core.model.account.QueryAccountRequest;
+import com.elbanking.core.model.account.QueryAccountResult;
 import com.elbanking.core.model.authentication.AuthRequest;
 import com.elbanking.core.model.authentication.AuthResult;
 import com.elbanking.core.model.transaction.InsertTransactionRequest;
@@ -58,12 +60,20 @@ class SmokeTest {
     @Test
     void smoke_test() throws Exception {
         objectMapper = new ObjectMapper();
+        // sign up new user
         signUp();
+
+        // login user
         String accessToken = login();
 
+        // insert withdrawal and deposit
         insertTransaction(accessToken);
 
+        // get user transaction statement
         getStatement(accessToken);
+
+        // get current user balance and check if the balance is correct
+        getAccount(accessToken);
     }
 
     @AfterEach
@@ -120,7 +130,7 @@ class SmokeTest {
     private Object convertDataToPojo(Object data,Class clazz){
         return objectMapper.convertValue(data,clazz);
     }
-    private Long insertTransaction(String accessToken){
+    private void insertTransaction(String accessToken){
         String url = buildUrl("/transactions");
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
@@ -153,8 +163,6 @@ class SmokeTest {
 
         Assertions.assertThat(debitResponseEntity).isNotNull();
         Assertions.assertThat(debitResponseEntity.getBody().getStatus()).isEqualTo(StatusCodeEnum.SUCCESS.getHttpStatusCode());
-        Long expectedRemainingBalance = AccountConstant.INITIAL_BALANCE - creditAmount + debitAmount;
-        return expectedRemainingBalance;
     }
 
     private void getStatement(String accessToken){
@@ -183,6 +191,30 @@ class SmokeTest {
 
         Assertions.assertThat(debitTransaction.getTransactionValue()).isEqualTo(debitAmount);
         Assertions.assertThat(debitTransaction.getType()).isEqualTo(TransactionTypeEnum.DEBIT.getCode());
+
+    }
+
+    private void getAccount(String accessToken){
+        String url = buildUrl("/getAccount");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(accessToken);
+
+        QueryAccountRequest queryAccountRequest = QueryAccountRequest
+                .builder()
+                .accessToken(accessToken)
+                .build();
+
+        HttpEntity<QueryAccountRequest> queryAccountRequestHttpEntity = new HttpEntity<>(queryAccountRequest,headers);
+        ResponseEntity<HTTPResult> queryAccountResponseEntity = this.restTemplate.exchange(url, HttpMethod.POST,queryAccountRequestHttpEntity,HTTPResult.class);
+
+        Assertions.assertThat(queryAccountResponseEntity).isNotNull();
+        Assertions.assertThat(queryAccountResponseEntity.getBody().getStatus()).isEqualTo(StatusCodeEnum.SUCCESS.getHttpStatusCode());
+
+        QueryAccountResult queryAccountResult = (QueryAccountResult) convertDataToPojo(queryAccountResponseEntity.getBody().getData(),QueryAccountResult.class);
+
+        Long expectedRemainingBalance = AccountConstant.INITIAL_BALANCE - creditAmount + debitAmount;
+
+        Assertions.assertThat(queryAccountResult.getBalance()).isEqualTo(expectedRemainingBalance);
 
     }
     private void printResponseJsonString(ResponseEntity responseEntity){
