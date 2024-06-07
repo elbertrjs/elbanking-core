@@ -1,10 +1,13 @@
 package com.elbanking.core.integration;
 
 import com.elbanking.core.application.ElbankingCoreApplication;
+import com.elbanking.core.constant.account.AccountConstant;
 import com.elbanking.core.enums.StatusCodeEnum;
+import com.elbanking.core.enums.TransactionTypeEnum;
 import com.elbanking.core.model.HTTPResult;
 import com.elbanking.core.model.authentication.AuthRequest;
 import com.elbanking.core.model.authentication.AuthResult;
+import com.elbanking.core.model.transaction.InsertTransactionRequest;
 import com.elbanking.core.model.user.RegisterUserRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,10 +20,12 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.List;
 import java.util.Map;
 
 @SpringBootTest(
@@ -50,6 +55,7 @@ class SmokeTest {
         signUp();
         String accessToken = login();
 
+        insertTransaction(accessToken);
 
     }
 
@@ -61,7 +67,7 @@ class SmokeTest {
     }
 
     private void signUp() throws JsonProcessingException {
-        String signUpUrl = "http://localhost:" + port + "/signUp";
+        String url = buildUrl("/signUp");
         String email = "test123@gmail.com";
         String password = "123456";
 
@@ -72,7 +78,7 @@ class SmokeTest {
                         .password(password)
                         .build();
 
-        ResponseEntity<HTTPResult> responseEntity = this.restTemplate.postForEntity(signUpUrl,
+        ResponseEntity<HTTPResult> responseEntity = this.restTemplate.postForEntity(url,
                 registerUserRequest,
                 HTTPResult.class);
 
@@ -83,13 +89,13 @@ class SmokeTest {
     }
 
     private String login() throws JsonProcessingException {
-        String loginUrl = "http://localhost:" + port + "/login";
+        String url = buildUrl("/login");
         AuthRequest request = AuthRequest.builder()
                 .email(email)
                 .password(password)
                 .build();
 
-        ResponseEntity<HTTPResult> responseEntity = this.restTemplate.postForEntity(loginUrl,
+        ResponseEntity<HTTPResult> responseEntity = this.restTemplate.postForEntity(url,
                 request,
                 HTTPResult.class);
 
@@ -103,18 +109,47 @@ class SmokeTest {
 
         return accessToken;
     }
+
     private Object convertDataToPojo(Object data,Class clazz){
         return objectMapper.convertValue(data,clazz);
     }
-    private ResponseEntity<HTTPResult> insertTransaction(String accessToken){
-        HttpHeaders authHeaders = new HttpHeaders();
-        HttpEntity<AuthRequest> authRequestHttpEntity = new HttpEntity<>(authHeaders);
-
-        return null;
-    }
-    private void setBearerToken(String accessToken){
+    private Long insertTransaction(String accessToken){
+        String url = buildUrl("/transactions");
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + accessToken);
+        headers.setBearerAuth(accessToken);
+
+        Long creditAmount = 7500000L;
+        Long debitAmount = 5000000L;
+
+        InsertTransactionRequest creditRequest = InsertTransactionRequest
+                .builder()
+                .accessToken(accessToken)
+                .amount(7500000L)
+                .type(TransactionTypeEnum.CREDIT.name())
+                .note("Electricity bill")
+                .build();
+
+        InsertTransactionRequest debitRequest = InsertTransactionRequest
+                .builder()
+                .accessToken(accessToken)
+                .amount(5000000L)
+                .type(TransactionTypeEnum.DEBIT.name())
+                .note("Freelance payment")
+                .build();
+
+        HttpEntity<InsertTransactionRequest> creditHTTPEntity = new HttpEntity<>(creditRequest,headers);
+        HttpEntity<InsertTransactionRequest> debitHTTPEntity = new HttpEntity<>(debitRequest,headers);
+
+        ResponseEntity<HTTPResult> creditResponseEntity = this.restTemplate.exchange(url, HttpMethod.POST,creditHTTPEntity,HTTPResult.class);
+        ResponseEntity<HTTPResult> debitResponseEntity = this.restTemplate.exchange(url, HttpMethod.POST,debitHTTPEntity,HTTPResult.class);
+
+        Assertions.assertThat(creditResponseEntity).isNotNull();
+        Assertions.assertThat(creditResponseEntity.getBody().getStatus()).isEqualTo(StatusCodeEnum.SUCCESS.getHttpStatusCode());
+
+        Assertions.assertThat(debitResponseEntity).isNotNull();
+        Assertions.assertThat(debitResponseEntity.getBody().getStatus()).isEqualTo(StatusCodeEnum.SUCCESS.getHttpStatusCode());
+        Long expectedRemainingBalance = AccountConstant.INITIAL_BALANCE - creditAmount + debitAmount;
+        return expectedRemainingBalance;
     }
 
     private void printResponseJsonString(ResponseEntity responseEntity){
@@ -123,5 +158,8 @@ class SmokeTest {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+    private String buildUrl(String endpoint){
+        return "http://localhost:" + port + endpoint;
     }
 }
